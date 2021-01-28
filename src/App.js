@@ -11,7 +11,13 @@ function App() {
         'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYxMTc3NDI5NSwiZXhwIjoxNjEyMzc5MDk1fQ.KXowULryeD-rOes8bHfNH7zqgWY0s8f-Tdas2P8Um3M'
       }
     })
+
     socket.on('message', (message) => console.log(message))
+
+    // cleanup    
+    return () => { // executed on component will unmount!
+      socket.close() // working as intended so ;)
+    }
   }, [])
 
   return (
