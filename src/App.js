@@ -1,6 +1,9 @@
+import { Box, HStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import './App.css';
 import openSocket from 'socket.io-client'
+import AppBar from './components/AppBar'
+import Sidebar from './components/Sidebar'
+import Chat from './components/Chat'
 
 function App() {
 
@@ -21,9 +24,15 @@ function App() {
   }, [])
 
   return (
-    <div className="app">
-      what a cool library!
-    </div>
+    <Box display='flex' flexFlow='column' height='100vh'>
+      <AppBar />
+      <HStack display='flex' flex='1'>
+        <Box height='100%' boxShadow='md' >
+          <Sidebar />
+        </Box>
+        <Chat />
+      </HStack>
+    </Box>
   );
 }
 
