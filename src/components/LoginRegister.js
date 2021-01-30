@@ -1,10 +1,12 @@
 import { AddIcon, UnlockIcon } from "@chakra-ui/icons"
 import {
   Box, FormControl, Input, FormLabel, Button, Center, Divider, Heading, VStack,
-  Wrap, WrapItem, FormErrorMessage, useBreakpointValue
+  Wrap, WrapItem, FormErrorMessage, useBreakpointValue,
 } from "@chakra-ui/react"
 import { Form, Formik, useField } from 'formik'
 import * as Yup from 'yup'
+import { signIn } from '../auth/authService'
+import { useAlert } from "react-alert";
 
 // this integration chakra-useField hook, my creation ;)
 const MyInput = ({ label, isRequired, ...props }) => { // custom imput, less code
@@ -16,44 +18,48 @@ const MyInput = ({ label, isRequired, ...props }) => { // custom imput, less cod
   </FormControl>
 }
 
-const SigninForm = () => <Formik
-  initialValues={{ username: '', password: '' }}
-  validationSchema={Yup.object({
-    username: Yup.string()
-      .max(15, 'Must be 15 characters or less') // form: validation, error message
-      .required('Required'),
-    password: Yup.string()
-      .min(6, 'Must be 6 characters at least')
-      .required('Required')
-  })}
-  onSubmit={(values, { setSubmitting }) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      setSubmitting(false);
-    }, 400)
-  }}
->
-  {props => <Form>
-    <MyInput
-      label='Username'
-      name='username'
-      type='text'
-      placeholder='type username'
-      isRequired
-    />
-    <MyInput
-      label='Password'
-      name='password'
-      type='password'
-      placeholder='type password'
-      isRequired
-    />
-    <Button mt={4}
-      colorScheme="blue"
-      isLoading={props.isSubmitting}
-      type="submit" >Login</Button>
-  </Form>}
-</Formik>
+const SigninForm = () => {
+  const alert = useAlert()
+
+  return <Formik
+    initialValues={{ username: '', password: '' }}
+    validationSchema={Yup.object({
+      username: Yup.string()
+        .max(15, 'Must be 15 characters or less') // form: validation, error message
+        .required('Required'),
+      password: Yup.string()
+        .min(6, 'Must be 6 characters at least')
+        .required('Required')
+    })}
+    onSubmit={(values, { setSubmitting }) => {
+      signIn(values)
+        .then(result => { alert.show(result, { type: 'success' }) })
+        .catch(e => alert.show(e, { type: 'error' }))
+        .finally(() => setSubmitting(false))
+    }}
+  >
+    {props => <Form>
+      <MyInput
+        label='Username'
+        name='username'
+        type='text'
+        placeholder='type username'
+        isRequired
+      />
+      <MyInput
+        label='Password'
+        name='password'
+        type='password'
+        placeholder='type password'
+        isRequired
+      />
+      <Button mt={4}
+        colorScheme="blue"
+        isLoading={props.isSubmitting}
+        type="submit" >Login</Button>
+    </Form>}
+  </Formik>
+}
 
 const SignupForm = () =>
   <Formik
