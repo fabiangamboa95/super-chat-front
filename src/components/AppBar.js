@@ -6,8 +6,8 @@ import {
 } from "@chakra-ui/react"
 
 const AppBar = () => {
-  return <Flex padding='2' alignItems='center' boxShadow='sm' >
-    <InputGroup w='20em' marginLeft='3'>
+  return <Flex padding='2' alignItems='center' boxShadow='md' w='inherit' maxW='80em' minH='3.5em'>
+    <InputGroup w='16em' marginLeft='3'>
       <InputLeftElement
         pointerEvents="none"
         children={<Search2Icon color="gray.300" />}
