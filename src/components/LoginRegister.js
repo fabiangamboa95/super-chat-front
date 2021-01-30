@@ -1,7 +1,7 @@
 import { AddIcon, UnlockIcon } from "@chakra-ui/icons"
 import {
-  Box, FormControl, Input, FormLabel, Button,
-  Center, Divider, Heading, VStack, Wrap, WrapItem, FormErrorMessage
+  Box, FormControl, Input, FormLabel, Button, Center, Divider, Heading, VStack,
+  Wrap, WrapItem, FormErrorMessage, useBreakpointValue
 } from "@chakra-ui/react"
 import { Form, Formik, useField } from 'formik'
 import * as Yup from 'yup'
@@ -107,8 +107,12 @@ const SignupForm = () =>
   </Formik>
 
 const LoginRegister = ({ setToken }) => {
-  return <Center h='100vh'>
-    <Wrap spacing='5em'>
+  // very nice ui hook, (set property value for diffrent breakpoints)
+  const dividerDisplay = useBreakpointValue({ base: 'none', lg: 'block' })
+  const wrapHeight = useBreakpointValue({ base: 'inherit', lg: '' })
+
+  return <Center h='100vh' >
+    <Wrap spacing='5em' justify='center' height={wrapHeight} >
       <WrapItem >
         <VStack>
           <Box bg='gray.100' display='flex' px='2.8em' py='2em' borderTopRadius='5px'>
@@ -122,7 +126,7 @@ const LoginRegister = ({ setToken }) => {
         </VStack>
       </WrapItem>
 
-      <WrapItem><Divider orientation="vertical" /></WrapItem>
+      <WrapItem display={dividerDisplay} ><Divider orientation="vertical" /></WrapItem>
 
       <WrapItem>
         <VStack >
