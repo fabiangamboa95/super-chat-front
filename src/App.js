@@ -8,6 +8,7 @@ import useToken from './auth/useToken';
 import LoginRegister from './components/LoginRegister';
 import { getConversations } from './services'
 import { useAlert } from 'react-alert'
+import { API_URL } from './services'
 
 function App() {
   const alert = useAlert()
@@ -31,7 +32,7 @@ function App() {
 
     setConversationsCallback()
 
-    const sockt = openSocket('http://localhost:3001', {
+    const sockt = openSocket(API_URL, {
       withCredentials: true,
       extraHeaders: {
         'x-auth-token': token

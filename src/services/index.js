@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { getBearerToken } from '../auth/authService'
 
-export const API_URL = 'http://localhost:3001'
+// export const API_URL = 'http://localhost:3001' //local
+export const API_URL = 'https://super-chat-backend.herokuapp.com' //deployed
 
 // consuming services of a NOT rest api aahhahaaha
 
