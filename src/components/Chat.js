@@ -1,8 +1,9 @@
 import { Box, Input, Button, Heading } from "@chakra-ui/react"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from 'styled-components'
 import { getMessages, sendMessage } from '../services'
 import { useImmer } from 'use-immer'
+import { useAlert } from 'react-alert'
 
 // as a prove here messagebox as styled components
 const MessageBox = styled.p`
@@ -29,29 +30,42 @@ const MessageTimestamp = styled.span`
 `
 
 const Chat = ({ conversation, socket }) => {
+  const alert = useAlert()
   const [message, setMessage] = useState('')
   const [messages, updateMessages] = useImmer([])
+  const chatBoxRef = useRef(null)
 
   useEffect(() => {
-    if (!conversation) {
-      return
-    }
-
+    if (!conversation) { return }
     getMessages(conversation.id)
       .then(result => updateMessages(() => result.result))
   }, [conversation, updateMessages])
 
   useEffect(() => {
-    if (!socket) { return }
+    if (!socket || !conversation) { return }
     socket.on('message', message => {
-      updateMessages(draft => [...draft, message])
+      if (message.conversationId === conversation.id) {
+        updateMessages(draft => [...draft, message])
+      }
+      else {
+        alert.show(`Incomming message from ${message.from.username}`, { type: 'success' })
+      }
     })
-  }, [socket, updateMessages])
+    return () => { // never forget to clean(not healthy have many open listeners)
+      socket.removeListener('message')
+    }
+  }, [socket, alert, conversation, updateMessages])
+
+  // effect for the box scroll
+  useEffect(() => {
+    const scroll = chatBoxRef.current.scrollHeight - chatBoxRef.current.clientHeight
+    chatBoxRef.current.scrollTo(0, scroll)
+  }, [messages])
 
   return <Box flex='1'
     display='flex' flexDirection='column' marginInlineStart='0 !important'>
     <Box flex='1' bgGradient="linear(#f9fafc, blue.500)"
-      padding='30px' overflowY='scroll' >
+      padding='30px' overflowY='scroll' ref={chatBoxRef} >
       {conversation && messages.map((message, i) => <MessageBox key={i}
         own={conversation.withUser.id !== message.senderId} >
         <MessageFrom>{message.from.username}</MessageFrom>{message.text}
