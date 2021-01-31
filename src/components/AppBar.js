@@ -1,11 +1,11 @@
 import { Search2Icon } from "@chakra-ui/icons"
 import {
-  Box, Flex, Heading, InputGroup, InputLeftElement,
+  Button, Flex, Heading, InputGroup, InputLeftElement,
   Input,
   Spacer
 } from "@chakra-ui/react"
 
-const AppBar = () => {
+const AppBar = ({ setToken }) => {
   return <Flex padding='2' alignItems='center' boxShadow='md' w='inherit' maxW='80em' minH='3.5em'>
     <InputGroup w='16em' marginLeft='3'>
       <InputLeftElement
@@ -17,7 +17,8 @@ const AppBar = () => {
     <Spacer flex='0.5' />
     <Heading size='md' color='blue.500' display={{ base: 'none', md: 'initial' }} >Super Chat</Heading>
     <Spacer />
-    <Box marginInline='3' color="gray.500">logout</Box>
+    <Button marginInline='3' colorScheme="gray"
+      variant="link" onClick={() => setToken(null)}>logout</Button>
   </Flex>
 }
 

@@ -38,7 +38,7 @@ function App() {
   return (
     <Box display='grid' placeItems='center' h='100vh' backgroundColor='#dadbd3' >
       <VStack backgroundColor='#ededed' h='90vh' w='90vw' boxShadow='base' maxW='80em' >
-        <AppBar />
+        <AppBar setToken={setToken} />
         <Box display='flex' w='100%' marginTop='0px !important' flexGrow='1' overflow='hidden' >
           <Sidebar />
           <Chat />

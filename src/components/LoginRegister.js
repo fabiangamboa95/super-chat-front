@@ -18,7 +18,7 @@ const MyInput = ({ label, isRequired, ...props }) => { // custom imput, less cod
   </FormControl>
 }
 
-const SigninForm = () => {
+const SigninForm = ({ setToken }) => {
   const alert = useAlert()
 
   return <Formik
@@ -33,7 +33,7 @@ const SigninForm = () => {
     })}
     onSubmit={(values, { setSubmitting }) => {
       signIn(values)
-        .then(result => { alert.show(result, { type: 'success' }) })
+        .then(result => setToken(result))
         .catch(e => alert.show(e, { type: 'error' }))
         .finally(() => setSubmitting(false))
     }}
@@ -127,7 +127,7 @@ const LoginRegister = ({ setToken }) => {
           </Box>
           <Box bg='gray.200' px='5em' py='2em'
             borderBottomRadius='5px' marginTop='0 !important' >
-            <SigninForm />
+            <SigninForm setToken={setToken} />
           </Box>
         </VStack>
       </WrapItem>

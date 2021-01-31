@@ -10,8 +10,13 @@ const useToken = () => {
     JSON.parse(sessionStorage.getItem('bearer-token'))?.token)
 
   const saveToken = bearerToken => {
-    sessionStorage.setItem('bearer-token', JSON.stringify(bearerToken))
-    setToken(bearerToken.token)
+    if (!bearerToken) {
+      sessionStorage.removeItem('bearer-token')
+    }
+    else {
+      sessionStorage.setItem('bearer-token', JSON.stringify(bearerToken))
+    }
+    setToken(bearerToken?.token)
   }
 
   return {
