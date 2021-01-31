@@ -6,7 +6,7 @@ import {
 import { Form, Formik, useField } from 'formik'
 import * as Yup from 'yup'
 import { signIn, signUp } from '../auth/authService'
-import { useAlert } from "react-alert";
+import { useAlert } from "react-alert"
 
 // this integration chakra-useField hook, my creation ;)
 const MyInput = ({ label, isRequired, ...props }) => { // custom imput, less code

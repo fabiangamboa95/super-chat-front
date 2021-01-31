@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-const API_URL = 'http://localhost:3001'
+import { API_URL } from '../services'
 
 export const signUp = async ({ username, password }) => {
   const response = await axios.post(API_URL + '/signup', {
@@ -25,3 +24,5 @@ export const signIn = async ({ username, password }) => {
 
   return { token: response.data.token }
 }
+
+export const getBearerToken = () => JSON.parse(sessionStorage.getItem('bearer-token')).token
