@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react"
 import { Form, Formik, useField } from 'formik'
 import * as Yup from 'yup'
-import { signIn } from '../auth/authService'
+import { signIn, signUp } from '../auth/authService'
 import { useAlert } from "react-alert";
 
 // this integration chakra-useField hook, my creation ;)
@@ -61,8 +61,10 @@ const SigninForm = ({ setToken }) => {
   </Formik>
 }
 
-const SignupForm = () =>
-  <Formik
+const SignupForm = ({ setToken }) => {
+  const alert = useAlert()
+
+  return <Formik
     initialValues={{ username: '', password: '', passwordConfirmation: '' }}
     validationSchema={Yup.object({
       username: Yup.string()
@@ -77,10 +79,10 @@ const SignupForm = () =>
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
     })}
     onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400)
+      signUp(values)
+        .then(result => setToken(result))
+        .catch(e => alert.show(e, { type: 'error' }))
+        .finally(() => setSubmitting(false))
     }}
   >
     {props => <Form>
@@ -111,6 +113,7 @@ const SignupForm = () =>
         type="submit" >Register</Button>
     </Form>}
   </Formik>
+}
 
 const LoginRegister = ({ setToken }) => {
   // very nice ui hook, (set property value for diffrent breakpoints)
@@ -142,7 +145,7 @@ const LoginRegister = ({ setToken }) => {
           </Box>
           <Box bg='gray.200' px='5em' py='2em'
             borderBottomRadius='5px' marginTop='0 !important' >
-            <SignupForm />
+            <SignupForm setToken={setToken} />
           </Box>
         </VStack>
       </WrapItem>
